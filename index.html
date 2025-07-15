@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auto Ice Cream Slider</title>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Luckiest Guy', cursive;
+      background: #f5c7a9;
+      color: #fff;
+    }
+
+    header .tags {
+      display: flex;
+      gap: 10px;
+      padding: 20px;
+    }
+
+    header .tags span {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: linear-gradient(to top, #d76737, #e78f4d);
+      border-radius: 20px;
+      width: 80%;
+      max-width: 1000px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: background 0.6s ease;
+    }
+
+    .card:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100px;
+      background: #f5c7a9;
+      border-top-left-radius: 50% 40px;
+      border-top-right-radius: 50% 40px;
+    }
+
+    .card-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 60px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .text-area {
+      max-width: 400px;
+    }
+
+    .text-area h1 {
+      font-size: 4rem;
+      margin: 0 0 20px 0;
+      line-height: 1.1;
+    }
+
+    .text-area p {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      margin-bottom: 30px;
+      line-height: 1.5;
+      max-width: 350px;
+    }
+
+    .buttons button {
+      margin-right: 15px;
+      padding: 10px 25px;
+      border: none;
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+      border-radius: 30px;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      transition: transform 0.3s ease;
+    }
+
+    .buttons button:hover {
+      transform: scale(1.1);
+    }
+
+    .images-area {
+      position: relative;
+    }
+
+    .images-area .main-icecream {
+      width: 280px;
+      transition: opacity 0.5s ease;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8rem;
+      color: #333;
+    }
+
+    @media (max-width: 768px) {
+      .card-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .images-area {
+        margin-top: 30px;
+      }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="tags">
+      <span>Tutorial</span>
+      <span>Figma</span>
+      <span>Motion</span>
+      <span>Web Design</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="card" id="card">
+      <div class="card-content">
+        <div class="text-area">
+          <h1>Delicious<br>Ice Cream</h1>
+          <p>Enjoy sweet and tasty treats with our wide range of ice creams. Taste the fun today!</p>
+          <div class="buttons">
+            <button>Order Now</button>
+            <button>Learn More</button>
+          </div>
+        </div>
+        <div class="images-area">
+          <img class="main-icecream" id="mainImage" src="https://cdn.shopify.com/s/files/1/0311/7167/4252/files/coffeekaramell.png?v=1593113460" alt="Ice Cream"/>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 All rights reserved.</p>
+  </footer>
+
+  <script>
+    // GSAP Animations
+    gsap.from(".tags span", {opacity: 0, y: -20, stagger: 0.1, duration: 1});
+    gsap.from(".text-area h1", {opacity: 0, x: -50, duration: 1, delay: 0.5});
+    gsap.from(".text-area p", {opacity: 0, x: -50, duration: 1, delay: 0.7});
+    gsap.from(".buttons button", {opacity: 0, y: 20, stagger: 0.2, duration: 1, delay: 1});
+    gsap.from(".main-icecream", {opacity: 0, scale: 0.8, duration: 1, delay: 1.2});
+
+    // Auto Slider Logic
+    const mainImage = document.getElementById('mainImage');
+    const card = document.getElementById('card');
+
+    const slides = [
+      { img: "https://cdn.shopify.com/s/files/1/0311/7167/4252/files/coffeekaramell.png?v=1593113460", color: "501d0a" },
+      { img: "https://publish.purewow.net/wp-content/uploads/sites/2/2021/04/nick-s-ice-cream-birthdag-cake.jpg?resize=720%2C780", color: "#8BC34A" },
+      { img: "https://i.ibb.co/5YkcdmN/icecream3.png", color: "501d0a" },
+      { img: "https://i.ibb.co/QcFZjR6/icecream4.png", color: "#FFB74D" },
+      { img: "https://i.ibb.co/XXLjcnD/icecream5.png", color: "501d0a" }
+    ];
+
+    let current = 0;
+
+    setInterval(() => {
+      current = (current + 1) % slides.length;
+
+      gsap.to(mainImage, {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: () => {
+          mainImage.src = slides[current].img;
+          gsap.to(mainImage, { opacity: 1, duration: 0.3 });
+        }
+      });
+
+      card.style.background = `linear-gradient(to top, ${slides[current].color}, ${slides[current].color})`;
+    }, 3000); // Every 3 seconds
+  </script>
+</body>
+</html>
