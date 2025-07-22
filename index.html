@@ -17,7 +17,6 @@
     body {
       height: 100vh;
       overflow: hidden;
-      /* Lock scroll */
     }
 
     body {
@@ -133,18 +132,17 @@
       }
     }
   </style>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 
 <body>
-
   <main>
     <div class="card" id="card">
       <div class="card-content">
         <div class="text-area">
-          <h1>Delicious<br>Ice Cream</h1>
-          <p>Enjoy sweet and tasty treats with our wide range of ice creams. Taste the fun today!</p>
+          <h1 id="slideHeading">Delicious<br>Ice Cream</h1>
+          <p id="slideDescription">Enjoy sweet and tasty treats with our wide range of ice creams. Taste the fun today!
+          </p>
           <div class="buttons">
             <button>Order Now</button>
             <button>Learn More</button>
@@ -154,7 +152,6 @@
           <img class="main-icecream" id="mainImage"
             src="https://publish.purewow.net/wp-content/uploads/sites/2/2021/04/nick-s-ice-cream-birthdag-cake.jpg?resize=720%2C780"
             alt="Ice Cream" />
-
         </div>
       </div>
     </div>
@@ -167,20 +164,55 @@
   <script>
     const mainImage = document.getElementById('mainImage');
     const card = document.getElementById('card');
+    const headingEl = document.getElementById('slideHeading');
+    const descEl = document.getElementById('slideDescription');
 
     const slides = [
-      { img: "img/OIP (1).webp", color: "#501d0a" },
-      { img: "https://publish.purewow.net/wp-content/uploads/sites/2/2021/04/nick-s-ice-cream-birthdag-cake.jpg?resize=720%2C780", color: "#feccd6" },
-      { img: "img/NHOWZ.webp", color: "#9dc4e1" },
-      { img: "img/oip.webp", color: "#ef5f56" },
-      { img: "img/nick.webp", color: "#7a4f83" }
+      {
+        img: "img/1.png",
+        color: "#501d0a",
+        heading: "Chocolate<br>Blast",
+        desc: "Rich, creamy chocolate ice cream that melts in your mouth."
+      },
+      {
+        img: "https://publish.purewow.net/wp-content/uploads/sites/2/2021/04/nick-s-ice-cream-birthdag-cake.jpg?resize=720%2C780",
+        color: "#feccd6",
+        heading: "Birthday<br>Cake",
+        desc: "Celebrate every day with this colorful, sprinkle-packed favorite!"
+      },
+      {
+        img: "img/NHOWZ.png",
+        color: "#9dc4e1",
+        heading: "Blueberry<br>Chill",
+        desc: "A tangy-sweet burst of blueberries in every refreshing bite."
+      },
+      {
+        img: "img/OIP.png",
+        color: "#ef5f56",
+        heading: "Strawberry<br>Crush",
+        desc: "Fresh strawberries blended into a smooth creamy dream."
+      },
+      {
+        img: "img/nick.png",
+        color: "#7a4f83",
+        heading: "Grape<br>Glory",
+        desc: "Bold grape flavor with a cool twist—pure purple pleasure!"
+      }
     ];
 
+    let current = 1;
+
+    function updateSlide() {
+      const slide = slides[current];
+      mainImage.src = slide.img;
+      card.style.background = `linear-gradient(to top, ${slide.color}, ${slide.color})`;
+    
+      headingEl.innerHTML = slide.heading;
+      descEl.textContent = slide.desc;
+    }
 
 
-    let current = 1; // Start with Nick's image
-    mainImage.src = slides[current].img;
-    card.style.background = `linear-gradient(to top, ${slides[current].color}, ${slides[current].color})`;
+    updateSlide();
 
     window.addEventListener('wheel', (e) => {
       mainImage.style.opacity = 0;
@@ -190,12 +222,33 @@
           ? (current + 1) % slides.length
           : (current - 1 + slides.length) % slides.length;
 
-        mainImage.src = slides[current].img;
-        card.style.background = `linear-gradient(to top, ${slides[current].color}, ${slides[current].color})`;
+        updateSlide();
         mainImage.style.opacity = 1;
       }, 200);
     });
 
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    });
+
+    window.addEventListener('touchend', (e) => {
+      const touchEndY = e.changedTouches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+
+      if (Math.abs(deltaY) > 50) {
+        mainImage.style.opacity = 0;
+
+        setTimeout(() => {
+          current = deltaY > 0
+            ? (current + 1) % slides.length
+            : (current - 1 + slides.length) % slides.length;
+
+          updateSlide();
+          mainImage.style.opacity = 1;
+        }, 200);
+      }
+    });
   </script>
 </body>
 
